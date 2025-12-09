@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.kazuhiko.jewelry.controller.MainController"
+            styleClass="root">
+    
+    <!-- Header -->
+    <top>
+        <VBox styleClass="header">
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Label text="💎 Jewelry Store" styleClass="app-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="statusLabel" text="Bem-vindo!" styleClass="status-label"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <!-- Sidebar -->
+    <left>
+        <VBox styleClass="sidebar" spacing="5" prefWidth="200">
+            <padding><Insets top="20" right="10" bottom="20" left="10"/></padding>
+            
+            <Label text="MENU" styleClass="menu-header"/>
+            
+            <Button text="📦 Inventário" onAction="#showInventory" styleClass="menu-button" maxWidth="Infinity"/>
+            <Button text="💰 Vendas" onAction="#showSales" styleClass="menu-button" maxWidth="Infinity"/>
+            
+            <Separator/>
+            
+            <Label text="AÇÕES" styleClass="menu-header"/>
+            
+            <Button text="➕ Nova Joia" onAction="#showAddJewelry" styleClass="menu-button action-button" maxWidth="Infinity"/>
+            <Button text="🛒 Registrar Venda" onAction="#recordSale" styleClass="menu-button action-button" maxWidth="Infinity"/>
+            
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <Label text="v1.0" styleClass="version-label"/>
+        </VBox>
+    </left>
+    
+    <!-- Main Content -->
+    <center>
+        <StackPane styleClass="content-area">
+            
+            <!-- Inventory View -->
+            <VBox fx:id="inventoryView" spacing="15">
+                <padding><Insets topRightBottomLeft="20"/></padding>
+                
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Inventário" styleClass="section-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="searchField" promptText="Buscar..." prefWidth="200" onAction="#searchJewelry"/>
+                    <Button text="🔍" onAction="#searchJewelry" styleClass="icon-button"/>
+                    <Button text="✖" onAction="#clearSearch" styleClass="icon-button"/>
+                </HBox>
+                
+                <TableView fx:id="inventoryTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+                    <columns>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                        <TableColumn fx:id="colName" text="Nome" prefWidth="150"/>
+                        <TableColumn fx:id="colType" text="Tipo" prefWidth="100"/>
+                        <TableColumn fx:id="colMaterial" text="Material" prefWidth="100"/>
+                        <TableColumn fx:id="colPrice" text="Preço" prefWidth="100"/>
+                        <TableColumn fx:id="colQuantity" text="Estoque" prefWidth="80"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Nenhuma joia cadastrada"/>
+                    </placeholder>
+                </TableView>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="✏️ Editar" onAction="#editSelectedJewelry" styleClass="action-btn"/>
+                    <Button text="🗑️ Excluir" onAction="#deleteSelectedJewelry" styleClass="action-btn danger-btn"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Sales View -->
+            <VBox fx:id="salesView" spacing="15" visible="false" managed="false">
+                <padding><Insets topRightBottomLeft="20"/></padding>
+                
+                <Label text="Histórico de Vendas" styleClass="section-title"/>
+                
+                <TableView fx:id="salesTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+                    <columns>
+                        <TableColumn fx:id="colSaleId" text="ID" prefWidth="50"/>
+                        <TableColumn fx:id="colSaleItem" text="Item" prefWidth="150"/>
+                        <TableColumn fx:id="colSaleQty" text="Qtd" prefWidth="60"/>
+                        <TableColumn fx:id="colSaleTotal" text="Total" prefWidth="100"/>
+                        <TableColumn fx:id="colSaleCustomer" text="Cliente" prefWidth="150"/>
+                        <TableColumn fx:id="colSaleDate" text="Data" prefWidth="140"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Nenhuma venda registrada"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+            
+            <!-- Add/Edit Jewelry Form -->
+            <VBox fx:id="addJewelryView" spacing="20" visible="false" managed="false" alignment="TOP_CENTER">
+                <padding><Insets topRightBottomLeft="30"/></padding>
+                
+                <Label fx:id="formTitle" text="Adicionar Nova Joia" styleClass="section-title"/>
+                
+                <VBox spacing="15" maxWidth="400" styleClass="form-container">
+                    <padding><Insets topRightBottomLeft="20"/></padding>
+                    
+                    <VBox spacing="5">
+                        <Label text="Nome" styleClass="form-label"/>
+                        <TextField fx:id="nameField" promptText="Nome da joia"/>
+                    </VBox>
+                    
+                    <HBox spacing="15">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Tipo" styleClass="form-label"/>
+                            <ComboBox fx:id="typeCombo" promptText="Selecione" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Material" styleClass="form-label"/>
+                            <ComboBox fx:id="materialCombo" promptText="Selecione" maxWidth="Infinity"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <HBox spacing="15">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Preço (R$)" styleClass="form-label"/>
+                            <TextField fx:id="priceField" promptText="0.00"/>
+                        </VBox>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Quantidade" styleClass="form-label"/>
+                            <TextField fx:id="quantityField" promptText="0"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <padding><Insets top="10"/></padding>
+                        <Button text="Cancelar" onAction="#cancelForm" styleClass="cancel-btn"/>
+                        <Button fx:id="saveButton" text="Salvar" onAction="#saveJewelry" styleClass="save-btn"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+            
+        </StackPane>
+    </center>
+    
+</BorderPane>
